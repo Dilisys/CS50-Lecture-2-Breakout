@@ -3,7 +3,7 @@ PlayState = Class{__includes = BaseState}
 function PlayState:init()
 	self.paddle = Paddle()
 
-	self.ball = Ball(1)
+	self.ball = Ball(math.random(7))
 
 	self.ball.dx = math.random(-200, 200)
 	self.ball.dy = math.random(-50, -60)
@@ -33,9 +33,22 @@ function PlayState:update(dt)
 	self.paddle:update(dt)
 	self.ball:update(dt)
 
+
 	if self.ball:collides(self.paddle) then
 		self.ball.y = self.paddle.y - 8
 		self.ball.dy = -self.ball.dy
+
+		--influnce angle of ball based on where it his paddle
+
+		--left side
+		if self.ball.x < self.paddle.x + (self.paddle.width / 2) and self.paddle.dx < 0 then
+			self.ball.dx = -50 + -(8 * (self.paddle.x + self.paddle.width / 2 - self.ball.x))
+
+		--right side
+		elseif self.ball.x > self.paddle.x + (self.paddle.width / 2) and self.paddle.dx > 0 then
+			self.ball.dx = 50 + (8 * math.abs(self.paddle.x + self.paddle.width / 2 - self.ball.x))
+		end
+
 		gSounds['paddle-hit']:play()
 	end
 
@@ -44,6 +57,37 @@ function PlayState:update(dt)
 		if brick.inPlay and self.ball:collides(brick) then
 
 			brick:hit()
+
+
+			--four part brick collision check, one per side
+
+			--left side
+			if self.ball.x + 2 < brick.x and self.ball.dx > 0 then
+
+				self.ball.dx = -self.ball.dx
+				self.ball.x = brick.x - self.ball.width
+
+			--right side
+			elseif self.ball.x + 6 > brick.x + brick.width and self.ball.dx < 0 then
+				self.ball.dx = -self.ball.dx
+				self.ball.x = brick.x + brick.width 
+
+			--top side
+			elseif self.ball.y < brick.y then
+			    self.ball.dy = -self.ball.y 
+			    self.ball.y = brick.y - self.ball.width 
+			
+			--bottom side
+			else
+				self.ball.dy = -self.ball.dy 
+				self.ball.y = brick.y + brick.height
+			end
+			
+			--increase ball speed per hit
+			self.ball.dy = self.ball.dy * 1.02
+
+			--only allow colliding with one brick
+			break
 		end
 	end
 

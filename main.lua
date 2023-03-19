@@ -26,8 +26,10 @@ function love.load()
 
 	--global quads object
 	gFrames = {
-		['paddles'] = GenerateQuadsPaddles(gTextures['main'])
-	}
+		['paddles'] = GenerateQuadsPaddles(gTextures['main']),
+		['balls'] = GenerateQuadsBalls(gTextures['main']),
+		['bricks'] = GenerateQuadsBricks(gTextures['main'])
+ 	}
 
 	--push screen setup
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {

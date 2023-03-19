@@ -32,6 +32,12 @@ function table.slice(tbl, first, last, step)
 	return sliced
 end
 
+
+--returns first 21 tiles of main spritesheet, which happens to be the bricks
+function GenerateQuadsBricks(atlas)
+	return table.slice(GenerateQuads(atlas, 32, 16), 1, 21)
+end
+
 --get the quads for the paddles and their different sizes
 
 function GenerateQuadsPaddles(atlas)
@@ -65,6 +71,33 @@ function GenerateQuadsPaddles(atlas)
 		--next loop
 		x = 0
 		y = y + 32
+	end
+
+	return quads
+end
+
+--gets the quads for the different balls
+
+function GenerateQuadsBalls(atlas)
+	local x = 96
+	local y = 48
+
+	local counter = 1
+	local quads = {}
+
+	for i = 0, 3 do
+		quads[counter] = love.graphics.newQuad(x, y, 8, 8, atlas:getDimensions())
+		x = x + 8
+		counter = counter + 1
+	end
+
+	x = 96
+	y = 56
+
+	for i = 0, 2 do
+		quads[counter] = love.graphics.newQuad(x, y, 8, 8, atlas:getDimensions())
+		x = x + 8
+		counter = counter + 1
 	end
 
 	return quads

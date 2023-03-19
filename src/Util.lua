@@ -102,3 +102,10 @@ function GenerateQuadsBalls(atlas)
 
 	return quads
 end
+
+--function that randomly returns true or false
+function coinFlip()
+	result = math.random(1, 2) == 1 and true or false
+
+	return result
+end

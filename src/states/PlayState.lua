@@ -54,7 +54,7 @@ function PlayState:update(dt)
 	for k, brick in pairs(self.bricks) do
 		if brick.inPlay and self.ball:collides(brick) then
 
-			self.score = self.score + 10
+			self.score = self.score + (brick.tier * 200 + brick.color * 25)
 
 			brick:hit()
 
@@ -110,6 +110,9 @@ function PlayState:update(dt)
 		end
 	end
 
+	for k, brick in pairs(self.bricks) do
+		brick:update(dt)
+	end
 
 	if love.keyboard.wasPressed('escape') then
 		love.event.quit()
@@ -120,6 +123,10 @@ function PlayState:render()
 
 	for k, brick in pairs(self.bricks) do
 		brick:render()
+	end
+
+	for k, brick in pairs(self.bricks) do
+		brick:renderParticles()
 	end
 
 	self.paddle:render()
